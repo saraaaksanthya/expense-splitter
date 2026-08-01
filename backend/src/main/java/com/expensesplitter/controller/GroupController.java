@@ -46,4 +46,9 @@ public class GroupController {
     public Group addMember(@PathVariable Long id, @PathVariable Long personId) {
         return groupService.addMember(id, personId);
     }
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        groupService.delete(id);
+    }
 }

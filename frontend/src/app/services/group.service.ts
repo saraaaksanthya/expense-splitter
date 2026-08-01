@@ -20,4 +20,7 @@ export class GroupService {
   create(name: string, memberIds: number[]): Observable<Group> {
     return this.http.post<Group>(`${API_BASE_URL}/groups`, { name, memberIds });
   }
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${API_BASE_URL}/groups/${id}`);
+  }
 }

@@ -1,11 +1,14 @@
 package com.expensesplitter.service;
 
 import com.expensesplitter.exception.ResourceNotFoundException;
+import com.expensesplitter.model.Expense;
 import com.expensesplitter.model.Group;
 import com.expensesplitter.model.Person;
+import com.expensesplitter.repository.ExpenseRepository;
 import com.expensesplitter.repository.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
@@ -16,11 +19,13 @@ public class GroupService {
 
     private final GroupRepository groupRepository;
     private final PersonService personService;
+    private final ExpenseRepository expenseRepository;
 
     @Autowired
-    public GroupService(GroupRepository groupRepository, PersonService personService) {
+    public GroupService(GroupRepository groupRepository, PersonService personService, ExpenseRepository expenseRepository) {
         this.groupRepository = groupRepository;
         this.personService = personService;
+        this.expenseRepository = expenseRepository;
     }
 
     public Group create(String name, List<Long> memberIds) {
@@ -47,5 +52,18 @@ public class GroupService {
         Person person = personService.findById(personId);
         group.getMembers().add(person);
         return groupRepository.save(group);
+    }
+
+    @Transactional
+    public void delete(Long groupId) {
+        Group group = findById(groupId);
+
+        List<Expense> expenses = expenseRepository.findByGroupId(groupId);
+        expenseRepository.deleteAll(expenses);
+
+        group.getMembers().clear();
+        groupRepository.save(group);
+
+        groupRepository.delete(group);
     }
 }

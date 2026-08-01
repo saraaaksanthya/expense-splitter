@@ -1,7 +1,10 @@
 <a routerLink="/" style="color:#4f46e5; text-decoration:none; font-size:14px;">&larr; All groups</a>
 
 <div class="card" *ngIf="group">
-  <h2>{{ group.name }}</h2>
+  <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+    <h2>{{ group.name }}</h2>
+    <button class="secondary" (click)="deleteGroup()">Delete Group</button>
+  </div>
   <div>
     <span class="pill" *ngFor="let m of group.members">{{ m.name }}</span>
   </div>

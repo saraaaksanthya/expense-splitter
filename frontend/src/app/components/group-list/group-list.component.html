@@ -7,8 +7,12 @@
     <button (click)="addPerson()" style="white-space:nowrap;">Add Person</button>
   </div>
 
-  <div *ngIf="people.length" style="margin-top:12px;">
-    <span class="pill" *ngFor="let p of people">{{ p.name }}</span>
+  <div *ngIf="people.length" style="margin-top:12px; display:flex; flex-wrap:wrap; gap:8px;">
+    <span class="pill" *ngFor="let p of people" style="display:flex; align-items:center; gap:6px;">
+      {{ p.name }}
+      <span (click)="deletePerson(p)" title="Delete person"
+            style="cursor:pointer; color:#dc2626; font-weight:bold;">&times;</span>
+    </span>
   </div>
 </div>
 
@@ -35,13 +39,14 @@
   <h2>3. Your groups</h2>
   <table *ngIf="groups.length; else noGroups">
     <thead>
-      <tr><th>Group</th><th>Members</th><th></th></tr>
+      <tr><th>Group</th><th>Members</th><th></th><th></th></tr>
     </thead>
     <tbody>
       <tr *ngFor="let g of groups">
         <td>{{ g.name }}</td>
         <td>{{ g.members?.length || 0 }} members</td>
         <td><a [routerLink]="['/groups', g.id]"><button>Open</button></a></td>
+        <td><button class="secondary" (click)="deleteGroup(g)">Delete</button></td>
       </tr>
     </tbody>
   </table>

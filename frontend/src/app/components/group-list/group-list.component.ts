@@ -81,4 +81,29 @@ export class GroupListComponent implements OnInit {
       error: (err) => this.errorMessage = err?.error?.message || 'Failed to create group'
     });
   }
+  deletePerson(person: Person): void {
+    if (!confirm(`Delete ${person.name}? This only works if they have no expense history.`)) {
+      return;
+    }
+    this.personService.delete(person.id!).subscribe({
+      next: () => {
+        this.errorMessage = '';
+        this.loadPeople();
+      },
+      error: (err) => this.errorMessage = err?.error?.message || 'Failed to delete person'
+    });
+  }
+
+  deleteGroup(group: Group): void {
+    if (!confirm(`Delete the group "${group.name}"? This also deletes all of its expenses.`)) {
+      return;
+    }
+    this.groupService.delete(group.id!).subscribe({
+      next: () => {
+        this.errorMessage = '';
+        this.loadGroups();
+      },
+      error: (err) => this.errorMessage = err?.error?.message || 'Failed to delete group'
+    });
+  }
 }

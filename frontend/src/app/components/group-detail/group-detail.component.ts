@@ -4,6 +4,8 @@ import { Group } from '../../models/group.model';
 import { Expense } from '../../models/expense.model';
 import { GroupService } from '../../services/group.service';
 import { ExpenseService } from '../../services/expense.service';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-group-detail',
@@ -22,6 +24,12 @@ export class GroupDetailComponent implements OnInit {
     private expenseService: ExpenseService
   ) {}
 
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private groupService: GroupService,
+    private expenseService: ExpenseService
+  ) {}
   ngOnInit(): void {
     this.groupId = Number(this.route.snapshot.paramMap.get('id'));
     this.loadGroup();
@@ -39,5 +47,14 @@ export class GroupDetailComponent implements OnInit {
   onExpenseAdded(): void {
     this.loadExpenses();
     this.refreshCounter++; // triggers SettlementViewComponent to reload via ngOnChanges
+  }
+  deleteGroup(): void {
+    if (!this.group) { return; }
+    if (!confirm(`Delete the group "${this.group.name}"? This also deletes all of its expenses.`)) {
+      return;
+    }
+    this.groupService.delete(this.groupId).subscribe({
+      next: () => this.router.navigate(['/'])
+    });
   }
 }

@@ -16,4 +16,7 @@ export class PersonService {
   create(person: Person): Observable<Person> {
     return this.http.post<Person>(`${API_BASE_URL}/people`, person);
   }
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${API_BASE_URL}/people/${id}`);
+  }
 }
