@@ -1,0 +1,41 @@
+<a routerLink="/" style="color:#4f46e5; text-decoration:none; font-size:14px;">&larr; All groups</a>
+
+<div class="card" *ngIf="group">
+  <h2>{{ group.name }}</h2>
+  <div>
+    <span class="pill" *ngFor="let m of group.members">{{ m.name }}</span>
+  </div>
+</div>
+
+<div class="card" *ngIf="group">
+  <h2>Add an expense</h2>
+  <app-expense-form
+    [groupId]="groupId"
+    [members]="group.members"
+    (expenseAdded)="onExpenseAdded()">
+  </app-expense-form>
+</div>
+
+<div class="card">
+  <h2>Expenses</h2>
+  <table *ngIf="expenses.length; else noExpenses">
+    <thead>
+      <tr><th>Description</th><th>Amount</th><th>Paid by</th><th>Split among</th></tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let e of expenses">
+        <td>{{ e.description }}</td>
+        <td>₹{{ e.amount | number:'1.2-2' }}</td>
+        <td>{{ e.paidBy.name }}</td>
+        <td>{{ e.splits.length }} people</td>
+      </tr>
+    </tbody>
+  </table>
+  <ng-template #noExpenses>
+    <p style="color:#6b7280; font-size:14px;">No expenses yet.</p>
+  </ng-template>
+</div>
+
+<div class="card" *ngIf="group">
+  <app-settlement-view [groupId]="groupId" [refreshTrigger]="refreshCounter"></app-settlement-view>
+</div>

@@ -1,0 +1,23 @@
+<div *ngIf="errorMessage" class="error-msg">{{ errorMessage }}</div>
+
+<input [(ngModel)]="description" placeholder="What was it for? (e.g. Dinner, Cab)" />
+<input [(ngModel)]="amount" type="number" placeholder="Amount" />
+
+<label style="font-size:13px; color:#6b7280; display:block; margin-top:8px;">Paid by</label>
+<select [(ngModel)]="paidById">
+  <option [ngValue]="null" disabled>Select who paid</option>
+  <option *ngFor="let m of members" [ngValue]="m.id">{{ m.name }}</option>
+</select>
+
+<label style="font-size:13px; color:#6b7280; display:block; margin-top:8px;">
+  Split between
+  <a (click)="selectAllParticipants()" style="cursor:pointer; color:#4f46e5;">(select all)</a>
+</label>
+<div class="checkbox-row" *ngFor="let m of members">
+  <input type="checkbox" [id]="'participant-' + m.id"
+         [checked]="isParticipant(m.id!)"
+         (change)="toggleParticipant(m.id!, $any($event.target).checked)" />
+  <label [for]="'participant-' + m.id">{{ m.name }}</label>
+</div>
+
+<button (click)="submit()" style="margin-top:12px;">Add Expense</button>

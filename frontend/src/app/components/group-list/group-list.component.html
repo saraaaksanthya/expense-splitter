@@ -1,0 +1,51 @@
+<div *ngIf="errorMessage" class="error-msg">{{ errorMessage }}</div>
+
+<div class="card">
+  <h2>1. Add people</h2>
+  <div style="display:flex; gap:8px;">
+    <input [(ngModel)]="newPersonName" placeholder="Person name" (keyup.enter)="addPerson()" />
+    <button (click)="addPerson()" style="white-space:nowrap;">Add Person</button>
+  </div>
+
+  <div *ngIf="people.length" style="margin-top:12px;">
+    <span class="pill" *ngFor="let p of people">{{ p.name }}</span>
+  </div>
+</div>
+
+<div class="card">
+  <h2>2. Create a group</h2>
+  <input [(ngModel)]="newGroupName" placeholder="Group name (e.g. Goa Trip)" />
+
+  <div *ngIf="people.length; else noPeople" style="margin-top:10px;">
+    <div class="checkbox-row" *ngFor="let p of people">
+      <input type="checkbox" [id]="'member-' + p.id"
+             [checked]="isSelected(p.id!)"
+             (change)="toggleMember(p.id!, $any($event.target).checked)" />
+      <label [for]="'member-' + p.id">{{ p.name }}</label>
+    </div>
+  </div>
+  <ng-template #noPeople>
+    <p style="color:#6b7280; font-size:14px;">Add at least one person above first.</p>
+  </ng-template>
+
+  <button (click)="createGroup()" style="margin-top:10px;">Create Group</button>
+</div>
+
+<div class="card">
+  <h2>3. Your groups</h2>
+  <table *ngIf="groups.length; else noGroups">
+    <thead>
+      <tr><th>Group</th><th>Members</th><th></th></tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let g of groups">
+        <td>{{ g.name }}</td>
+        <td>{{ g.members?.length || 0 }} members</td>
+        <td><a [routerLink]="['/groups', g.id]"><button>Open</button></a></td>
+      </tr>
+    </tbody>
+  </table>
+  <ng-template #noGroups>
+    <p style="color:#6b7280; font-size:14px;">No groups yet — create one above.</p>
+  </ng-template>
+</div>

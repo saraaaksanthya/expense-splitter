@@ -1,0 +1,24 @@
+<h3>Net balances</h3>
+<table>
+  <thead>
+    <tr><th>Person</th><th>Balance</th></tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let b of balances">
+      <td>{{ b.personName }}</td>
+      <td [class]="balanceClass(b.netBalance)">
+        {{ b.netBalance > 0 ? 'is owed' : (b.netBalance < 0 ? 'owes' : 'settled up') }}
+        <ng-container *ngIf="b.netBalance !== 0">₹{{ (b.netBalance < 0 ? -b.netBalance : b.netBalance) | number:'1.2-2' }}</ng-container>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 style="margin-top:20px;">Suggested settlements</h3>
+<p *ngIf="!settlements.length" style="color:#6b7280; font-size:14px;">Everyone's settled up 🎉</p>
+<div class="settlement-row" *ngFor="let s of settlements">
+  <span class="pill">{{ s.fromPersonName }}</span>
+  <span>pays</span>
+  <span class="pill">{{ s.toPersonName }}</span>
+  <strong style="margin-left:auto;">₹{{ s.amount | number:'1.2-2' }}</strong>
+</div>
