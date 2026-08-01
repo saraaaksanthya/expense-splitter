@@ -23,7 +23,7 @@
   <h2>Expenses</h2>
   <table *ngIf="expenses.length; else noExpenses">
     <thead>
-      <tr><th>Description</th><th>Amount</th><th>Paid by</th><th>Split among</th></tr>
+      <tr><th>Description</th><th>Amount</th><th>Paid by</th><th>Split among</th><th></th></tr>
     </thead>
     <tbody>
       <tr *ngFor="let e of expenses">
@@ -31,6 +31,7 @@
         <td>₹{{ e.amount | number:'1.2-2' }}</td>
         <td>{{ e.paidBy.name }}</td>
         <td>{{ e.splits.length }} people</td>
+        <td><button class="secondary" (click)="deleteExpense(e)">Delete</button></td>
       </tr>
     </tbody>
   </table>

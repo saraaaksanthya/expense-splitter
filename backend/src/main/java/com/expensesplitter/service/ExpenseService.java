@@ -97,6 +97,17 @@ public class ExpenseService {
     public List<Expense> getExpensesForGroup(Long groupId) {
         return expenseRepository.findByGroupId(groupId);
     }
+    public void deleteExpense(Long groupId, Long expenseId) {
+        Expense expense = expenseRepository.findById(expenseId)
+                .orElseThrow(() -> new com.expensesplitter.exception.ResourceNotFoundException(
+                        "Expense not found with id: " + expenseId));
+
+        if (!expense.getGroup().getId().equals(groupId)) {
+            throw new InvalidExpenseException("This expense does not belong to the given group");
+        }
+
+        expenseRepository.delete(expense);
+    }
 
     private double round2(double value) {
         return Math.round(value * 100.0) / 100.0;

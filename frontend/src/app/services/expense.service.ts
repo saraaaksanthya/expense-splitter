@@ -16,4 +16,7 @@ export class ExpenseService {
   add(groupId: number, request: ExpenseRequest): Observable<Expense> {
     return this.http.post<Expense>(`${API_BASE_URL}/groups/${groupId}/expenses`, request);
   }
+  delete(groupId: number, expenseId: number): Observable<void> {
+    return this.http.delete<void>(`${API_BASE_URL}/groups/${groupId}/expenses/${expenseId}`);
+  }
 }

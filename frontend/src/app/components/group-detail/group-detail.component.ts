@@ -42,6 +42,18 @@ export class GroupDetailComponent implements OnInit {
     this.refreshCounter++;
   }
 
+  deleteExpense(expense: Expense): void {
+    if (!confirm(`Delete the expense "${expense.description}" (₹${expense.amount})?`)) {
+      return;
+    }
+    this.expenseService.delete(this.groupId, expense.id!).subscribe({
+      next: () => {
+        this.loadExpenses();
+        this.refreshCounter++;
+      }
+    });
+  }
+
   deleteGroup(): void {
     if (!this.group) { return; }
     if (!confirm(`Delete the group "${this.group.name}"? This also deletes all of its expenses.`)) {

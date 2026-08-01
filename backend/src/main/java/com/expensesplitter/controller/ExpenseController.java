@@ -32,4 +32,9 @@ public class ExpenseController {
     public List<Expense> getExpenses(@PathVariable Long groupId) {
         return expenseService.getExpensesForGroup(groupId);
     }
+    @DeleteMapping("/{expenseId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteExpense(@PathVariable Long groupId, @PathVariable Long expenseId) {
+        expenseService.deleteExpense(groupId, expenseId);
+    }
 }
