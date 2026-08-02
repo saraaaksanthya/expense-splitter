@@ -21,8 +21,22 @@ export class SettlementViewComponent implements OnChanges {
 
   ngOnChanges(): void {
     if (this.groupId) {
+      this.loadPaidKeysFromStorage();
       this.load();
     }
+  }
+
+  private storageKey(): string {
+    return `expense-splitter-paid-group-${this.groupId}`;
+  }
+
+  private loadPaidKeysFromStorage(): void {
+    const raw = localStorage.getItem(this.storageKey());
+    this.paidKeys = raw ? new Set(JSON.parse(raw)) : new Set<string>();
+  }
+
+  private savePaidKeysToStorage(): void {
+    localStorage.setItem(this.storageKey(), JSON.stringify([...this.paidKeys]));
   }
 
   load(): void {
@@ -57,5 +71,6 @@ export class SettlementViewComponent implements OnChanges {
     } else {
       this.paidKeys.add(key);
     }
+    this.savePaidKeysToStorage();
   }
 }
