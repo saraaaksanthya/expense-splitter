@@ -16,9 +16,10 @@
 
 <h3 style="margin-top:20px;">Suggested settlements</h3>
 <p *ngIf="!settlements.length" style="color:#6b7280; font-size:14px;">Everyone's settled up 🎉</p>
-<div class="settlement-row" *ngFor="let s of settlements">
-  <span class="pill">{{ s.fromPersonName }}</span>
+<div class="settlement-row" *ngFor="let s of settlements" [style.opacity]="isPaid(s) ? 0.5 : 1">
+  <input type="checkbox" [checked]="isPaid(s)" (change)="togglePaid(s)" title="Mark as paid" />
+  <span class="pill" [style.text-decoration]="isPaid(s) ? 'line-through' : 'none'">{{ s.fromPersonName }}</span>
   <span>pays</span>
-  <span class="pill">{{ s.toPersonName }}</span>
-  <strong style="margin-left:auto;">₹{{ s.amount | number:'1.2-2' }}</strong>
+  <span class="pill" [style.text-decoration]="isPaid(s) ? 'line-through' : 'none'">{{ s.toPersonName }}</span>
+  <strong style="margin-left:auto;" [style.text-decoration]="isPaid(s) ? 'line-through' : 'none'">₹{{ s.amount | number:'1.2-2' }}</strong>
 </div>

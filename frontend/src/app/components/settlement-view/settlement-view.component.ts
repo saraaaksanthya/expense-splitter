@@ -9,11 +9,13 @@ import { SettlementService } from '../../services/settlement.service';
 export class SettlementViewComponent implements OnChanges {
 
   @Input() groupId!: number;
-  @Input() refreshTrigger: unknown; // parent bumps this to force a reload
+  @Input() refreshTrigger: unknown;
 
   balances: Balance[] = [];
   settlements: Settlement[] = [];
   loading = false;
+
+  paidKeys = new Set<string>();
 
   constructor(private settlementService: SettlementService) {}
 
@@ -38,5 +40,22 @@ export class SettlementViewComponent implements OnChanges {
     if (balance > 0.01) { return 'balance-positive'; }
     if (balance < -0.01) { return 'balance-negative'; }
     return 'balance-zero';
+  }
+
+  settlementKey(s: Settlement): string {
+    return `${s.fromPersonId}-${s.toPersonId}-${s.amount}`;
+  }
+
+  isPaid(s: Settlement): boolean {
+    return this.paidKeys.has(this.settlementKey(s));
+  }
+
+  togglePaid(s: Settlement): void {
+    const key = this.settlementKey(s);
+    if (this.paidKeys.has(key)) {
+      this.paidKeys.delete(key);
+    } else {
+      this.paidKeys.add(key);
+    }
   }
 }
